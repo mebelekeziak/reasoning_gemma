@@ -29,3 +29,8 @@ where = ["src"]
 
 [tool.black]
 line-length = 120
+
+# Ensure packages that build custom CUDA extensions declare torch during build isolation.
+# uv respects this table to pre-install torch before compiling flash-attn (pulled in by verifiers[rl]).
+[tool.uv.extra-build-dependencies]
+flash-attn = ["torch"]
