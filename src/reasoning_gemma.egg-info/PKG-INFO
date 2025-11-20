@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: reasoning-gemma
+Version: 0.1.0
+Summary: SFT + RL adapters for Gemma 3 12B on Prime Intellect environments
+Requires-Python: >=3.12
+Requires-Dist: torch>=2.3.0
+Requires-Dist: transformers>=4.45.0
+Requires-Dist: datasets>=2.20.0
+Requires-Dist: accelerate>=0.33.0
+Requires-Dist: trl>=0.9.4
+Requires-Dist: peft>=0.12.0
+Requires-Dist: bitsandbytes>=0.43.0; platform_system != "Windows"
+Requires-Dist: sentencepiece>=0.2.0
+Requires-Dist: verifiers[rl]
+Provides-Extra: prime-rl
+Requires-Dist: prime-rl@ git+https://github.com/PrimeIntellect-ai/prime-rl.git ; platform_system != "Windows" and extra == "prime-rl"
