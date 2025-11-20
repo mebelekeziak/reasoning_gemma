@@ -1,0 +1,31 @@
+[project]
+name = "reasoning-gemma"
+version = "0.1.0"
+description = "SFT + RL adapters for Gemma 3 12B on Prime Intellect environments"
+requires-python = ">=3.12"
+dependencies = [
+    "torch>=2.3.0",
+    "transformers>=4.45.0",
+    "datasets>=2.20.0",
+    "accelerate>=0.33.0",
+    "trl>=0.9.4",
+    "peft>=0.12.0",
+    'bitsandbytes>=0.43.0 ; platform_system != "Windows"',
+    "sentencepiece>=0.2.0",
+    "verifiers[rl]",
+]
+
+[project.optional-dependencies]
+# Install this extra only on Linux training nodes (Prime RL pulls triton/liger which have no Windows wheels).
+prime-rl = [
+    'prime-rl @ git+https://github.com/PrimeIntellect-ai/prime-rl.git ; platform_system != "Windows"'
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 120

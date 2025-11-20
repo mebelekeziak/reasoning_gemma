@@ -1,0 +1,66 @@
+inference_gpu_ids = [0]
+trainer_gpu_ids = [1]
+max_steps = 600
+seed = 13
+
+[model]
+name = "google/gemma-3-12b-it"
+
+[ckpt]
+path = "checkpoints/rl"
+interval = 50            # save every N trainer steps
+keep = 4                 # keep latest checkpoints to save disk
+save_latest = true
+
+[trainer.optim]
+lr = 5e-5
+weight_decay = 0.05
+
+[trainer.model.experimental.lora]
+rank = 16
+alpha = 32
+dropout = 0.05
+target_modules = [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj",
+]
+lora_path = "checkpoints/sft-gemma3-12b"   # seed RL with the SFT adapter output
+
+[orchestrator]
+batch_size = 256               # total samples per trainer step
+rollouts_per_example = 8
+seq_len = 4096
+mask_truncated_completions = false
+zero_truncated_completions = true
+
+[orchestrator.sampling]
+max_tokens = 512
+temperature = 0.8
+top_p = 0.95
+
+[orchestrator.buffer]
+type = "online-difficulty"
+oversampling_factor = 2.0
+
+[[orchestrator.env]]
+id = "vf-math-python"          # math environment, installed via vf-install
+weight = 0.6
+rollouts_per_example = 8
+max_concurrent = 256
+
+[[orchestrator.env]]
+id = "wordle"                  # lightweight logic puzzle environment from verifiers repo
+weight = 0.4
+rollouts_per_example = 8
+max_concurrent = 256
+
+[inference.model]
+enable_auto_tool_choice = true
+tool_call_parser = "hermes"
+dtype = "bfloat16"
+max_model_len = 4096
