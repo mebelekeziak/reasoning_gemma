@@ -1,6 +1,6 @@
 inference_gpu_ids = [0]
 trainer_gpu_ids = [1]
-max_steps = 600
+max_steps = 1000
 seed = 13
 
 [model]
